@@ -7,6 +7,9 @@ const morgan = require('morgan')
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
 const cors = require('cors')
+//import routes
+const productsRoute = require('./routes/products')
+
 //app
 const app = express()
 
@@ -19,24 +22,26 @@ app.use(morgan('tiny'))
 app.use(cors())
 app.options('*', cors())
 
-//import routes
-const productsRoute = require('./routes/products')
-
 //db
 mongoose
     .connect(process.env.MONGO_URL)
     .then(() => {
-        console.log('Database Connected')
+        console.log('Database Connected Successfully')
     })
     .catch((err) => {
         console.log(err)
         console.log('Database Not Connected')
     })
 
+
 //routes
 app.use(`${api}/products`, productsRoute)
 
 //listener
-const server = app.listen(port, () => {
+app.listen(port, () => {
+    console.log(api)
     console.log(`server is running at http://localhost:${port}`)
 })
+
+
+// localhost:3000/api/v1/products
